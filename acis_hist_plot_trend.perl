@@ -28,7 +28,7 @@ open(WARN, '>/data/mta/www/mta_acis_hist/Data/warn_no_data_trend');
 OUTER:
 for($ccd = 0; $ccd < 10; $ccd++){
 	$name = "ccd$ccd".'_line_fitting_data';
-	open(COUT,"> /data/mta/www/mta_acis_hist/Data/Results/$name");
+	open(COUT,"> /data/mta/www/mta_acis_hist/Results/$name");
 	OUTER1:
 	foreach $loc ('low', 'high'){
 
@@ -36,7 +36,7 @@ for($ccd = 0; $ccd < 10; $ccd++){
 
 		OUTER2:
 		for($node = 0; $node < 4; $node++){
-			$input_file  = '/data/mta/www/mta_acis_hist/Data/Results/CCD'."$ccd".'/node'."$node".'_'."$loc";
+			$input_file  = '/data/mta/www/mta_acis_hist/Results/CCD'."$ccd".'/node'."$node".'_'."$loc";
 
 			@{xtime.$node}    = ();
 			@{frame.$node}    = ();
@@ -158,7 +158,7 @@ for($ccd = 0; $ccd < 10; $ccd++){
 #---- plotting peaks
 #
 
-		$out_plot1 = '/data/mta/www/mta_acis_hist/Data/Results/CCD'."$ccd".'/'."$loc".'_peak.gif';
+		$out_plot1 = '/data/mta/www/mta_acis_hist/Results/CCD'."$ccd".'/'."$loc".'_peak.gif';
 		if($loc eq 'high'){
 			$line = '801 - 1001';
 		}
@@ -229,7 +229,7 @@ for($ccd = 0; $ccd < 10; $ccd++){
 #---- plotting widths 
 #
 
-		$out_plot2 = '/data/mta/www/mta_acis_hist/Data/Results/CCD'."$ccd".'/'."$loc".'_width.gif';
+		$out_plot2 = '/data/mta/www/mta_acis_hist/Results/CCD'."$ccd".'/'."$loc".'_width.gif';
 		if($loc eq 'high'){
 			$line = '801 - 1001';
 		}
@@ -304,7 +304,7 @@ for($ccd = 0; $ccd < 10; $ccd++){
 #---- plotting count rates
 #
 
-		$out_plot3 = '/data/mta/www/mta_acis_hist/Data/Results/CCD'."$ccd".'/'."$loc".'_count.gif';
+		$out_plot3 = '/data/mta/www/mta_acis_hist/Results/CCD'."$ccd".'/'."$loc".'_count.gif';
 		if($loc eq 'high'){
 			$line = '801 - 1001';
 		}

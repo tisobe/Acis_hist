@@ -128,7 +128,7 @@ for($ccd = 0; $ccd < 10; $ccd++){
 #--- they go to Results directory. Otherwise they go to a current directory
 #
 		if($state_ind == 0){
-			$plot_file = '/data/mta/www/mta_acis_hist/Data/Results/CCD'."$ccd".'/'.'total_bkg.gif';
+			$plot_file = '/data/mta/www/mta_acis_hist/Results/CCD'."$ccd".'/'.'total_bkg.gif';
 		}else {
 			$plot_file = 'CCD'."$ccd".'/'.'total_bkg.gif';
 		}

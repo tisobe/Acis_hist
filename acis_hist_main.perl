@@ -290,7 +290,7 @@ foreach $file (@file_list){
 #
 # --- ccd raws are between 801 and 1001
 #
-			$out_dir = '/data/mta/www/mta_acis_hist/Data/Results/CCD'."$ccd".'/node'."$node".'_high';
+			$out_dir = '/data/mta/www/mta_acis_hist/Results/CCD'."$ccd".'/node'."$node".'_high';
 
 			open(OUT, ">> $out_dir");
 			print OUT "$tstart\t";
@@ -321,7 +321,7 @@ foreach $file (@file_list){
 #
 # --- ccd raws are between 21 and 221
 #
-			$out_dir = '/data/mta/www/mta_acis_hist/Data/Results/CCD'."$ccd".'/node'."$node".'_low';
+			$out_dir = '/data/mta/www/mta_acis_hist/Results/CCD'."$ccd".'/node'."$node".'_low';
 
 			open(OUT, ">> $out_dir");
 			print OUT "$tstart\t";
@@ -391,7 +391,7 @@ foreach $file (@file_list){
 				$ecnt++;
 			}
 			@{$plot_out_file} = @temp;
-			$out_dir = '/data/mtawww/mta_acis_hist/Data/Results/CCD'."$ccd".'/node'."$node".'_high_bkg';
+			$out_dir = '/data/mtawww/mta_acis_hist/Results/CCD'."$ccd".'/node'."$node".'_high_bkg';
 			open(BKG, ">>$out_dir");
 			print BKG "$tstart\t";
 			print BKG "$tstop\t";
@@ -434,7 +434,7 @@ foreach $file (@file_list){
 				$ecnt++;
 			}
 			@{$plot_out_file} = @temp;
-			$out_dir = '/data/mta/www/mta_acis_hist/Data/Results/CCD'."$ccd".'/node'."$node".'_low_bkg';
+			$out_dir = '/data/mta/www/mta_acis_hist/Results/CCD'."$ccd".'/node'."$node".'_low_bkg';
 			open(BKG, ">>$out_dir");
 			print BKG "$tstart\t";
 			print BKG "$tstop\t";
@@ -476,7 +476,7 @@ foreach $file (@file_list){
 				$ecnt++;
 			}
 			@{$plot_out_file} = @temp;
-			$out_dir = '/data/mta/www/mta_acis_hist/Data/Results/CCD'."$ccd".'/node'."$node".'_full_bkg';
+			$out_dir = '/data/mta/www/mta_acis_hist/Results/CCD'."$ccd".'/node'."$node".'_full_bkg';
 			open(BKG, ">>$out_dir");
 			print BKG "$tstart\t";
 			print BKG "$tstop\t";
