@@ -1,0 +1,6 @@
+source /home/mta/.ascrc
+
+perl /data/mta4/MTA/bin/acis_hist_main.perl
+perl /data/mta4/MTA/bin/acis_hist_plot_trend.perl
+perl /data/mta4/MTA/bin/acis_hist_acc_bkg_plot_full.perl
+perl /data/mta4/MTA/bin/acis_hist_print_html.perl
