@@ -19,6 +19,14 @@ use PGPLOT;
 
 $sec_per_frame = 3.2412;
 
+system("mkdir ./Temp_dir");
+
+$chk = `ls ./`;
+if($chk =~ /param/){
+        system("rm -rf param");
+}
+system("mkdir ./param"):
+
 #
 #--- checking whether the data exist or not
 #
@@ -381,6 +389,8 @@ for($ccd = 0; $ccd < 10; $ccd++){
 	}
 	close(COUT);
 }
+
+system('rm -rf  ./Temp_dir/*fits param');
 
 
 #####################################################################

@@ -30,6 +30,15 @@ if($file eq ''){
 	$state_ind = 1;
 }
 
+system("mkdir ./Temp_dir");
+
+$chk = `ls ./`;
+if($chk =~ /param/){
+        system("rm -rf param");
+}
+system("mkdir ./param"):
+
+
 #
 #---- loop around all CCD, Node, and location on CCD
 #
@@ -203,6 +212,7 @@ for($ccd = 0; $ccd < 10; $ccd++){
 	system('rm pgplot.ps');
 }	
 
+system('rm -rf  ./Temp_dir/*fits param');
 
 ########################################################
 ### plot_fig: plotting data points on a fig          ###

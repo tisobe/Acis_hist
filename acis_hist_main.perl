@@ -29,8 +29,14 @@ close(FH);
 
 system("mkdir ./Temp_dir");
 
+$chk = `ls ./`;
+if($chk =~ /param/){
+	system("rm -rf param");
+}
+system("mkdir ./param"):
+
 system('mv /data/mta/www/mta_acis_hist/Results /data/mta/www/mta_acis_hist/Results~');
-system('mkdir /data/mta/www/mta_acis_hist/Results'):
+system('mkdir /data/mta/www/mta_acis_hist/Results');
 
 #
 #--- find out which month of data we want to work with
@@ -112,10 +118,13 @@ if($next_mon == 13) {
 
 $dir_name = '/data/mta/www/mta_acis_hist/Data/Data'."_$year"."_$month";
 
-system("mkdir $dir_name");
-system("mkdir $dir_name/CCD0 $dir_name/CCD1 $dir_name/CCD2 $dir_name/CCD3");
-system("mkdir $dir_name/CCD4 $dir_name/CCD6 $dir_name/CCD8 $dir_name/CCD9");
-system("mkdir $dir_name/CCD5 $dir_name/CCD7");
+$chk = `ls -d /data/mta/www/mta_acis_hist/Data/*`;
+if($chk !~ /$dir_name/){
+	system("mkdir $dir_name");
+	system("mkdir $dir_name/CCD0 $dir_name/CCD1 $dir_name/CCD2 $dir_name/CCD3");
+	system("mkdir $dir_name/CCD4 $dir_name/CCD6 $dir_name/CCD8 $dir_name/CCD9");
+	system("mkdir $dir_name/CCD5 $dir_name/CCD7");
+}
 
 #
 #--- initialize a few parameters
@@ -175,6 +184,8 @@ print OUT "tstop=$next_mon/01/$end_year,00:00:00\n";
 print OUT "go\n";
 close(OUT);
 
+system('rm -rf  ./Temp_dir/*fits param');
+
 #####################################################
 #
 #---- here is the arc4gl reading
@@ -182,7 +193,6 @@ close(OUT);
 system("cd ./Temp_dir; echo $pass | arc4gl -U$dare -Sarcocc -i./input_line"); 
 #####################################################
 
-system('rm ./Temp_dir/*fits');
 system("gzip -d ./Temp_dir/*gz");    # unzip data
 system("rm ./Temp_dir/input_line");
 
