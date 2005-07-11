@@ -36,7 +36,7 @@ $chk = `ls ./`;
 if($chk =~ /param/){
         system("rm -rf param");
 }
-system("mkdir ./param"):
+system("mkdir ./param");
 
 
 #

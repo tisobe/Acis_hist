@@ -33,10 +33,9 @@ $chk = `ls ./`;
 if($chk =~ /param/){
 	system("rm -rf param");
 }
-system("mkdir ./param"):
+system("mkdir ./param");
 
-system('mv /data/mta/www/mta_acis_hist/Results /data/mta/www/mta_acis_hist/Results~');
-system('mkdir /data/mta/www/mta_acis_hist/Results');
+system('cp -r /data/mta/www/mta_acis_hist/Results /data/mta/www/mta_acis_hist/Results~');
 
 #
 #--- find out which month of data we want to work with
@@ -456,7 +455,8 @@ foreach $file (@file_list){
 			print BKG "$name\n";
 			close(BKG);
 			
-		}elsif($pblock == 4530196){
+#		}elsif($pblock == 4530196){
+		}else{
 			print WRT "$name: background:low\n";
 #
 # --- ccd full range 0 - 4012

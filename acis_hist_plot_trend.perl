@@ -25,7 +25,7 @@ $chk = `ls ./`;
 if($chk =~ /param/){
         system("rm -rf param");
 }
-system("mkdir ./param"):
+system("mkdir ./param");
 
 #
 #--- checking whether the data exist or not
@@ -209,6 +209,7 @@ for($ccd = 0; $ccd < 10; $ccd++){
 #
 #---- linear fit
 #
+print "I am here: $ccd<-->$loc<--->$elm<--->$node\n";
 				least_fit();
 
 				if($loc eq 'high'){
@@ -280,6 +281,7 @@ for($ccd = 0; $ccd < 10; $ccd++){
 #
 #--- linear fit
 #
+print "I am there: $ccd<-->$loc<--->$elm<--->$node\n";
 				least_fit();
 
 				if($loc eq 'high'){

@@ -86,7 +86,7 @@ sub print_main_html{
 	print OUT '<HTML>';
 	print OUT "\n";
 
-	print OUT '<BODY TEXT="#FFFFFF" BGCOLOR="#000000" LINK="#00CCFF" VLINK="#B6FFFF" ALINK="#FF0000", background ="./stars.jpg">';
+	print OUT '<BODY TEXT="#FFFFFF" BGCOLOR="#000000" LINK="#00CCFF" VLINK="yellow" ALINK="#FF0000", background ="./stars.jpg">';
 	print OUT "\n";
 
 
@@ -297,14 +297,14 @@ print OUT '<a href="./Results/ccd1_line_fitting_data">CCD1 Line Fitting Results<
 print OUT '<a href="./Results/ccd2_line_fitting_data">CCD2 Line Fitting Results</a><br>',"\n";
 print OUT '<a href="./Results/ccd3_line_fitting_data">CCD3 Line Fitting Results</a><br>',"\n";
 print OUT '<a href="./Results/ccd6_line_fitting_data">CCD6 Line Fitting Results</a><br>',"\n";
-print OUT '<a href="./Results/ccd7_line_fitting_data">CCD7 Line Fitting Results</a><br>',"\n";
-print OUT '<br><br>',"\n";
-print OUT '<a href="./Results/ccd1_bkg_fitting_data">CCD1 Background Fitting Results</a><br>',"\n";
-print OUT '<a href="./Results/ccd2_bkg_fitting_data">CCD2 Background Fitting Results</a><br>',"\n";
-print OUT '<a href="./Results/ccd3_bkg_fitting_data">CCD3 Background Fitting Results</a><br>',"\n";
-print OUT '<a href="./Results/ccd6_bkg_fitting_data">CCD6 Background Fitting Results</a><br>',"\n";
-print OUT '<a href="./Results/ccd7_bkg_fitting_data">CCD7 Background Fitting Results</a><br>',"\n";
-
+#print OUT '<a href="./Results/ccd7_line_fitting_data">CCD7 Line Fitting Results</a><br>',"\n";
+#print OUT '<br><br>',"\n";
+#print OUT '<a href="./Results/ccd1_bkg_fitting_data">CCD1 Background Fitting Results</a><br>',"\n";
+#print OUT '<a href="./Results/ccd2_bkg_fitting_data">CCD2 Background Fitting Results</a><br>',"\n";
+#print OUT '<a href="./Results/ccd3_bkg_fitting_data">CCD3 Background Fitting Results</a><br>',"\n";
+#print OUT '<a href="./Results/ccd6_bkg_fitting_data">CCD6 Background Fitting Results</a><br>',"\n";
+#print OUT '<a href="./Results/ccd7_bkg_fitting_data">CCD7 Background Fitting Results</a><br>',"\n";
+#
 print OUT '<br><br><br><br>',"\n";
 print OUT 'Last updated:  ';
 print OUT "$uyear-$month-$umday  ","\n";

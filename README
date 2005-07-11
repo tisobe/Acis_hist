@@ -108,3 +108,47 @@ pnmflip
 ppmtogif
 	 ------ these two codes are used to convert a ps file to a gif file.
 		located in /data/mta4/MTA/bin
+
+
+
+------------------------------
+Memo from Peter Ford (3/14/05)
+------------------------------
+
+
+Here's a table showing the various PBLOCKs (and window blocks) we've used
+since the end of OAC.
+
+   N   PBLOCK   PBLOCK     WBLOCK   NC ROW1 ROWS
+------------------------------------------------
+   1   806932 0x000c5014            I5   0  1024
+   1   815124 0x000c7014            S5   0  1024
+  12  1802260 0x001b8014            I5   0  1024
+   8  1810452 0x001ba014            S5   0  1024
+   3  2334740 0x0023a014 0x00036014 I5   0  1024
+ 107  2334740 0x0023a014 0x00038014 I5   0  1024
+ 119  2342932 0x0023c014 0x00039014 I5   0  1024
+   2  2342932 0x0023c014 0xa0000004 I5   0  1024
+   1  2760724 0x002a2014            I6   0  1024
+  69  4530196 0x00452014            I5   0  1024
+   3  4534292 0x00453014            I5   0  1024
+   1  5169172 0x004ee014 0x0005a014 I5   0  1024
+   1  5242900 0x00500014 0x0005b014 I5   0  1024
+   2  7086100 0x006c2014            I5   0  1024
+------------------------------------------------
+
+where N is the number of runs using this PBLOCK (shown above in decimal
+and hexadecimal), WBLOCK is the value of its accompanying window block
+(if used). NC indicates how many CCDs were run and whether they were
+mostly from the I- or S-array. ROW1 indicates the first row read out,
+and ROWS the total number of rows read.
+
+The most common window blocks, 0x00038014 and 0x00039014, restrict the
+rows to 801-1001 and 21-221, counting from 0, respectively. Without a
+window block, all rows are accepted, i.e., 1-1022 (since an event
+cannot be centered on row 0 or row 1023).
+
+Most of our recent histogram runs have used 0x0023a014, 0x0023c014,
+and 0x00452014, but we have also begun to use 0x006c2014 to monitor all
+rows of the four ACIS-I chips + CCD_S3.
+
