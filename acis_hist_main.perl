@@ -7,11 +7,27 @@ use PGPLOT;
 #												#
 #	author: t. isobe (tisobe@cfa.harvard.edu)						#
 #												#
-#	last update: 03/08/05									#
+#	last update: Jun 05, 2007								#
 #												#
 #################################################################################################
 
-open(FH, '/data/mta4/MTA/data/.hakama');
+#############################################################################
+#
+#---- set directories
+
+$web_dir  = '/data/mta/www/mta_acis_hist/';
+$bin_dir  = '/data/mta/MTA/bin/';
+$data_dir = '/data/mta/MTA/data/';
+
+#############################################################################
+#
+#--- extra directories
+
+$mj_dir   = '/data/mta_www/mta_temp/mta_states/MJ/';
+
+#############################################################################
+
+open(FH, "$data_dir/.hakama");
 while(<FH>){
 	chomp $_;
 	$pass = $_;
@@ -19,7 +35,7 @@ while(<FH>){
 }
 close(FH);
 
-open(FH, '/data/mta4/MTA/data/.dare');
+open(FH, "$data_dir/.dare");
 while(<FH>){
 	chomp $_;
 	$dare = $_;
@@ -35,21 +51,29 @@ if($chk =~ /param/){
 }
 system("mkdir ./param");
 
-system('cp -r /data/mta/www/mta_acis_hist/Results /data/mta/www/mta_acis_hist/Results~');
+system("cp -r $web_dir/Results $web_dir/Results~");
 
 #
 #--- find out which month of data we want to work with
 #--- zlist is created in a pearent script run_for_this_month.perl
 #
-($usec, $umin, $uhour, $umday, $umon, $uyear, $uwday, $uyday, $uisdst)= localtime(time);
 
-if($uyear < 1900) {
+$year  = $ARGV[0];
+$month = $ARGV[1];
+chomp $year;
+chomp $month;
+
+if($year eq '' || $month eq ''){
+
+	($usec, $umin, $uhour, $umday, $umon, $uyear, $uwday, $uyday, $uisdst)= localtime(time);
+
         $year = 1900 + $uyear;
-}
-$month = $umon;
-if($month == 0){
-	$month = 12;
-	$year--;
+	
+	$month = $umon;
+	if($month == 0){
+		$month = 12;
+		$year--;
+	}
 }
 
 #
@@ -59,14 +83,17 @@ if($month == 0){
 find_ydate_month();
 $tyear = $year;
 $ydate = $date_start;
-$hour = 0;
-$min  = 0; 
-$sec  = 0;
-convert_time();
-$date_start = $t1998;
+$hour  = 0;
+$min   = 0; 
+$sec   = 0;
 
-$ydate = $date_end + 1;
 convert_time();
+
+$date_start = $t1998;
+$ydate      = $date_end + 1;
+
+convert_time();
+
 $date_end   = $t1998;
 
 #
@@ -74,20 +101,24 @@ $date_end   = $t1998;
 #
 
 $file = 'comprehensive_data_summary'."$year";
-open(FH, "/data/mta_www/mta_temp/mta_states/MJ/$year/$file");
+
+open(FH, "$mj_dir/$year/$file");
+
 @sim_time = ();
 @sim_pos  = ();
 $sim_cnt  = 0;
 while(<FH>){
 	chomp $_;
-	@atemp = split(/\s+/, $_);
-	@btemp = split(/:/, $atemp[0]);
+	@atemp  = split(/\s+/, $_);
+	@btemp  = split(/:/, $atemp[0]);
 	$tyear  = $btemp[0];
 	$ydate  = $btemp[1];
 	$hour   = $btemp[2];
 	$min    = $btemp[3];
 	$sec    = $btemp[4];
+
 	convert_time();
+
 	if($t1998 >= $date_start && $t1998 < $date_end){
 		push(@sim_time, $t1998);
 		push(@sim_pos,  $atemp[1]);
@@ -101,23 +132,25 @@ close(FH);
 #
 
 $next_mon = $month + 1;
+
 if($next_mon > 13 || $next_mon < 1){
 	print "something wrong about the month\n";
 	exit 1;
 }
 $end_year = $year;
+
 if($next_mon == 13) {
 	$next_mon = 1;
-	$end_year = $ent_year + 1;
+	$end_year = $end_year + 1;
 }
 
 #
 #--- create output directory
 #
 
-$dir_name = '/data/mta/www/mta_acis_hist/Data/Data'."_$year"."_$month";
+$dir_name = "$web_dir".'/Data/Data'."_$year"."_$month";
 
-$chk = `ls -d /data/mta/www/mta_acis_hist/Data/*`;
+$chk = `ls -d $web_dir/Data/*`;
 if($chk !~ /$dir_name/){
 	system("mkdir $dir_name");
 	system("mkdir $dir_name/CCD0 $dir_name/CCD1 $dir_name/CCD2 $dir_name/CCD3");
@@ -131,31 +164,35 @@ if($chk !~ /$dir_name/){
 
 for($ccd = 0; $ccd < 10; $ccd++){
 	for($node = 0; $node < 4; $node++){
-		$cnt_out_file  = 'CCD'."$ccd".'_node'."$node".'_high_cnt';
-		${$cnt_out_file} = 0;
-		$plot_out_file = 'CCD'."$ccd".'_node'."$node".'_high';
+		$cnt_out_file     = 'CCD'."$ccd".'_node'."$node".'_high_cnt';
+		${$cnt_out_file}  = 0;
+		$plot_out_file    = 'CCD'."$ccd".'_node'."$node".'_high';
 		@{$plot_out_file} = ();
+
 		for($i = 0; $i < 4096; $i++){
 			${$plot_out_file}[$i] = 0;
 		}
-		$cnt_out_file  = 'CCD'."$ccd".'_node'."$node".'_low_cnt';
-		${$cnt_out_file} = 0;
-		$plot_out_file = 'CCD'."$ccd".'_node'."$node".'_low';
+		$cnt_out_file     = 'CCD'."$ccd".'_node'."$node".'_low_cnt';
+		${$cnt_out_file}  = 0;
+		$plot_out_file    = 'CCD'."$ccd".'_node'."$node".'_low';
 		@{$plot_out_file} = ();
+
 		for($i = 0; $i < 4096; $i++){
 			${$plot_out_file}[$i] = 0;
 		}
-		$cnt_out_file  = 'CCD'."$ccd".'_node'."$node".'_high_cnt_bkg';
-		${$cnt_out_file} = 0;
-		$plot_out_file = 'CCD'."$ccd".'_node'."$node".'_high_bkg';
+		$cnt_out_file     = 'CCD'."$ccd".'_node'."$node".'_high_cnt_bkg';
+		${$cnt_out_file}  = 0;
+		$plot_out_file    = 'CCD'."$ccd".'_node'."$node".'_high_bkg';
 		@{$plot_out_file} = ();
+
 		for($i = 0; $i < 4096; $i++){
 			${$plot_out_file}[$i] = 0;
 		}
-		$cnt_out_file  = 'CCD'."$ccd".'_node'."$node".'_low_cnt_bkg';
-		${$cnt_out_file} = 0;
-		$plot_out_file = 'CCD'."$ccd".'_node'."$node".'_low_bkg';
+		$cnt_out_file     = 'CCD'."$ccd".'_node'."$node".'_low_cnt_bkg';
+		${$cnt_out_file}  = 0;
+		$plot_out_file    = 'CCD'."$ccd".'_node'."$node".'_low_bkg';
 		@{$plot_out_file} = ();
+
 		for($i = 0; $i < 4096; $i++){
 			${$plot_out_file}[$i] = 0;
 		}
@@ -201,8 +238,8 @@ $t_list    = `ls ./Temp_dir/*fits`;
 @obs_list  = ();
 
 foreach $file (@file_list){
-	@btemp = split(/\//,$file);
-	@atemp = split(/E/, $btemp[2]);
+	@btemp    = split(/\//,$file);
+	@atemp    = split(/E/, $btemp[2]);
 	$file_nam = $atemp[0];
 	push(@{list.$atemp[0]}, $file);
 	push(@obs_list,$atemp[0]);
@@ -215,48 +252,52 @@ foreach $file (@file_list){
 #---- read out information of the histgram data
 #
 
-	system("fdump $file ./Temp_dir/zaout counts - clobber='yes'");
+	system("dmlist infile=$file outfile=./Temp_dir/zaout opt=head");
 	open(FH,"./Temp_dir/zaout");
-	@data = ();
-	$start = 0;
+	$start  = 0;
 	$pblock = 0;
 	while(<FH>) {
 		chomp $_;
-		@atemp = split(/\s/,$_);
-		@line = ();
-		foreach $ent (@atemp){
-			if($ent =~ /\w/){
-				push(@line,$ent);
-			}
-		}
-		if($start == 1){
-			push(@data,$line[1]);
-		 } elsif($_ =~ /        count/){
-			$start = 1;
-		 } elsif($line[0] =~ /FEP_ID/){
-			$fep = $line[1];
-		 } elsif($line[0] =~ /CCD_ID/){
-			$ccd = $line[1];
+		@line = split(/\s+/, $_);
+		 if($_ =~ /FEP_ID/){
+			$fep      = $line[2];
+		 } elsif($_ =~ /CCD_ID/){
+			$ccd      = $line[2];
 			push(@{ccd_list.$file_nam},$ccd);
-		} elsif($line[0] =~ /NODE_ID/){
-			$node = $line[1];
-		} elsif($line[0] =~ /PBLOCK/){
-			$pblock = $line[1];
-		} elsif($line[0] =~ /TSTART/) {
-			$tstart = $line[1];
-		} elsif($line[0] =~ /TSTOP/) {
-			$tstop = $line[1];
-		} elsif($line[0] =~ /EXPCOUNT/) {
-			$expcount = $line[1];
-		} elsif($line[0] =~ /DATE-OBS/){
-			@btemp = split(/\'/,$_);
-			$date_obs = $btemp[1];
-		} elsif($line[0] =~ /DATE-END/){
-			@btemp = split(/\'/,$_);
-			$date_end = $btemp[1];
+		} elsif($_ =~ /NODE_ID/){
+			$node     = $line[2];
+		} elsif($_ =~ /PBLOCK/){
+			$pblock   = $line[2];
+		} elsif($_ =~ /TSTART/ && $_ !~ /BEP/) {
+			$tstart   = $line[2];
+		} elsif($_ =~ /TSTOP/ && $_ !~ /BEP/) {
+			$tstop    = $line[2];
+		} elsif($_ =~ /EXPCOUNT/) {
+			$expcount = $line[2];
+		} elsif($_ =~ /DATE-OBS/){
+			$date_obs = $line[2];
+		} elsif($_ =~ /DATE-END/){
+			$date_end = $line[2];
 		}
 	}	
 	close(FH);
+	system("rm ./Temp_dir/zaout"); 
+
+	$line = "$file".'[cols counts]';
+	system("dmlist infile=\"$line\" outfile=./Temp_dir/zaout opt=data");
+	open(FH,"./Temp_dir/zaout");
+	@data = ();
+	OUTER:
+	while(<FH>){
+		chomp $_;
+		@atemp = split(/\s+/, $_);
+		if($atemp[1] =~ /\d/ && $atemp[2] =~ /\d/){
+			push(@data, $atemp[2]);
+		}
+	}
+	close(FH);
+	system("rm ./Temp_dir/zaout"); 
+
 	@ntemp = split(/\//, $file);
 	@mtemp = split(/\.fits/,$ntemp[2]);
 	$name  = $mtemp[0];
@@ -287,7 +328,7 @@ foreach $file (@file_list){
 #--- plot fitting for 3 peaks
 #
 		$plot_out_dir = "$dir_name".'/CCD'."$ccd".'/'."$name".'.gif';
-		$title = "$name: ". 'CCD'."$ccd".' Node'."$node";
+		$title        = "$name: ". 'CCD'."$ccd".' Node'."$node";
 		$plot_fit_line = 1;
 		plot_fit();
 
@@ -299,7 +340,7 @@ foreach $file (@file_list){
 #
 # --- ccd raws are between 801 and 1001
 #
-			$out_dir = '/data/mta/www/mta_acis_hist/Results/CCD'."$ccd".'/node'."$node".'_high';
+			$out_dir = "$web_dir".'/Results/CCD'."$ccd".'/node'."$node".'_high';
 
 			open(OUT, ">> $out_dir");
 			print OUT "$tstart\t";
@@ -330,7 +371,7 @@ foreach $file (@file_list){
 #
 # --- ccd raws are between 21 and 221
 #
-			$out_dir = '/data/mta/www/mta_acis_hist/Results/CCD'."$ccd".'/node'."$node".'_low';
+			$out_dir = "$web_dir".'/Results/CCD'."$ccd".'/node'."$node".'_low';
 
 			open(OUT, ">> $out_dir");
 			print OUT "$tstart\t";
@@ -376,7 +417,7 @@ foreach $file (@file_list){
 # --- ccd raws are between 801 and 1001
 #
 			$plot_out_file = 'CCD'."$ccd".'_node'."$node".'_high_bkg';
-			$plot_out_cnt = 'CCD'."$ccd".'_node'."$node".'_high_cnt_bkg';
+			$plot_out_cnt  = 'CCD'."$ccd".'_node'."$node".'_high_cnt_bkg';
 			${$plot_out_cnt}++;
 			$ecnt = 0;
 			@temp = ();
@@ -400,7 +441,7 @@ foreach $file (@file_list){
 				$ecnt++;
 			}
 			@{$plot_out_file} = @temp;
-			$out_dir = '/data/mtawww/mta_acis_hist/Results/CCD'."$ccd".'/node'."$node".'_high_bkg';
+			$out_dir = "$web_dir".'/Results/CCD'."$ccd".'/node'."$node".'_high_bkg';
 			open(BKG, ">>$out_dir");
 			print BKG "$tstart\t";
 			print BKG "$tstop\t";
@@ -419,7 +460,7 @@ foreach $file (@file_list){
 # --- ccd raws are between 21 and 221
 #
 			$plot_out_file = 'CCD'."$ccd".'_node'."$node".'_low_bkg';
-			$plot_out_cnt = 'CCD'."$ccd".'_node'."$node".'_low_cnt_bkg';
+			$plot_out_cnt  = 'CCD'."$ccd".'_node'."$node".'_low_cnt_bkg';
 			${$plot_out_cnt}++;
 			$ecnt = 0;
 			@temp = ();
@@ -427,6 +468,7 @@ foreach $file (@file_list){
 			$bin1 = $bkrange1[$m];
 			$bin2 = $bkrange2[$m];
 			$bksum[$m] = 0;
+
 			foreach $ent (@{$plot_out_file}){
 				print TBL "$ecnt\t$data[$ecnt]\n";
 				$de3 = $data[$ecnt]/$expcount/3.2412;
@@ -443,12 +485,13 @@ foreach $file (@file_list){
 				$ecnt++;
 			}
 			@{$plot_out_file} = @temp;
-			$out_dir = '/data/mta/www/mta_acis_hist/Results/CCD'."$ccd".'/node'."$node".'_low_bkg';
+			$out_dir = "$web_dir".'/Results/CCD'."$ccd".'/node'."$node".'_low_bkg';
 			open(BKG, ">>$out_dir");
 			print BKG "$tstart\t";
 			print BKG "$tstop\t";
 			print BKG "$expcount\t";
 			print BKG "$fep\t";
+
 			for($m = 0; $m < 8; $m++){
 				printf BKG "%8.6f\t",$bksum[$m];
 			}
@@ -462,7 +505,7 @@ foreach $file (@file_list){
 # --- ccd full range 0 - 4012
 #
 			$plot_out_file = 'CCD'."$ccd".'_node'."$node".'_full_bkg';
-			$plot_out_cnt = 'CCD'."$ccd".'_node'."$node".'_full_cnt_bkg';
+			$plot_out_cnt  = 'CCD'."$ccd".'_node'."$node".'_full_cnt_bkg';
 			${$plot_out_cnt}++;
 			$ecnt = 0;
 			@temp = ();
@@ -486,7 +529,7 @@ foreach $file (@file_list){
 				$ecnt++;
 			}
 			@{$plot_out_file} = @temp;
-			$out_dir = '/data/mta/www/mta_acis_hist/Results/CCD'."$ccd".'/node'."$node".'_full_bkg';
+			$out_dir = "$web_dir".'/Results/CCD'."$ccd".'/node'."$node".'_full_bkg';
 			open(BKG, ">>$out_dir");
 			print BKG "$tstart\t";
 			print BKG "$tstop\t";
@@ -514,8 +557,9 @@ for($ccd = 0; $ccd < 10; $ccd++){
 		@ydata = ();
 		$cnt_out_file  = 'CCD'."$ccd".'_node'."$node".'_high_cnt';
 		$plot_out_file = 'CCD'."$ccd".'_node'."$node".'_high';
-		$out_file = "$dir_name".'/CCD'."$ccd".'/node'."$node".'_high';
-		$plot_out_cnt = 'CCD'."$ccd".'_node'."$node".'_high_cnt';
+		$out_file      = "$dir_name".'/CCD'."$ccd".'/node'."$node".'_high';
+		$plot_out_cnt  = 'CCD'."$ccd".'_node'."$node".'_high_cnt';
+
 		if(${$plot_out_cnt} > 0){
 			open(OUT,">$out_file");
 			print OUT "# no. of file: ${$plot_out_cnt}\n";
@@ -529,10 +573,10 @@ for($ccd = 0; $ccd < 10; $ccd++){
 			}
 			close(OUT);
 #
-			$plot_out_dir = "$dir_name".'/CCD'."$ccd".'/node'."$node".'_high.gif';
-			$title = "Combined Data (# of file: ${$plot_out_cnt}): ". 'CCD'."$ccd".' Node'."$node";
-			$plot_fit_line  = 2;
-			@data = @ydata;
+			$plot_out_dir  = "$dir_name".'/CCD'."$ccd".'/node'."$node".'_high.gif';
+			$title         = "Combined Data (# of file: ${$plot_out_cnt}): ". 'CCD'."$ccd".' Node'."$node";
+			$plot_fit_line = 2;
+			@data          = @ydata;
 			find_peaks();
 			plot_fit();
 		}
@@ -541,8 +585,9 @@ for($ccd = 0; $ccd < 10; $ccd++){
 		@ydata = ();
 		$cnt_out_file  = 'CCD'."$ccd".'_node'."$node".'_low_cnt';
 		$plot_out_file = 'CCD'."$ccd".'_node'."$node".'_low';
-		$out_file = "$dir_name".'/CCD'."$ccd".'/node'."$node".'_low';
-		$plot_out_cnt = 'CCD'."$ccd".'_node'."$node".'_low_cnt';
+		$out_file      = "$dir_name".'/CCD'."$ccd".'/node'."$node".'_low';
+		$plot_out_cnt  = 'CCD'."$ccd".'_node'."$node".'_low_cnt';
+
 		if(${$plot_out_cnt} > 0){
 			open(OUT,">$out_file");
 			print OUT "# no. of file: ${$plot_out_cnt}\n";
@@ -556,10 +601,10 @@ for($ccd = 0; $ccd < 10; $ccd++){
 			}
 			close(OUT);
 #
-			$plot_out_dir = "$dir_name".'/'.'/CCD'."$ccd".'/node'."$node".'_low.gif';
-			$title = "Combined Data (# of file: ${$plot_out_cnt}): ". 'CCD'."$ccd".' Node'."$node";
-			$plot_fit_line  = 2;
-			@data = @ydata;
+			$plot_out_dir  = "$dir_name".'/'.'/CCD'."$ccd".'/node'."$node".'_low.gif';
+			$title         = "Combined Data (# of file: ${$plot_out_cnt}): ". 'CCD'."$ccd".' Node'."$node";
+			$plot_fit_line = 2;
+			@data          = @ydata;
 			find_peaks();
 			plot_fit();
 		}
@@ -568,8 +613,9 @@ for($ccd = 0; $ccd < 10; $ccd++){
 		@ydata = ();
 		$cnt_out_file  = 'CCD'."$ccd".'_node'."$node".'_high_cnt_bkg';
 		$plot_out_file = 'CCD'."$ccd".'_node'."$node".'_high_bkg';
-		$out_file = "$dir_name".'/CCD'."$ccd".'/node'."$node".'_high_bkg';
-		$plot_out_cnt = 'CCD'."$ccd".'_node'."$node".'_high_cnt_bkg';
+		$out_file      = "$dir_name".'/CCD'."$ccd".'/node'."$node".'_high_bkg';
+		$plot_out_cnt  = 'CCD'."$ccd".'_node'."$node".'_high_cnt_bkg';
+
 		if(${$plot_out_cnt} > 0){
 			open(OUT,">$out_file");
 			print OUT "# no. of file: ${$plot_out_cnt}\n";
@@ -583,9 +629,9 @@ for($ccd = 0; $ccd < 10; $ccd++){
 			}
 			close(OUT);
 #
-			$plot_out_dir = "$dir_name".'/CCD'."$ccd".'/node'."$node".'_high_bkg.gif';
-			$title = "Combined Data (# of file: ${$plot_out_cnt}): ". 'CCD'."$ccd".' Node'."$node";
-			$plot_fit_line  = 0;
+			$plot_out_dir  = "$dir_name".'/CCD'."$ccd".'/node'."$node".'_high_bkg.gif';
+			$title         = "Combined Data (# of file: ${$plot_out_cnt}): ". 'CCD'."$ccd".' Node'."$node";
+			$plot_fit_line = 0;
 			plot_fit();
 		}
 		
@@ -593,8 +639,9 @@ for($ccd = 0; $ccd < 10; $ccd++){
 		@ydata = ();
 		$cnt_out_file  = 'CCD'."$ccd".'_node'."$node".'_low_cnt_bkg';
 		$plot_out_file = 'CCD'."$ccd".'_node'."$node".'_low_bkg';
-		$out_file = "$dir_name".'/CCD'."$ccd".'/node'."$node".'_low_bkg';
-		$plot_out_cnt = 'CCD'."$ccd".'_node'."$node".'_low_cnt_bkg';
+		$out_file      = "$dir_name".'/CCD'."$ccd".'/node'."$node".'_low_bkg';
+		$plot_out_cnt  = 'CCD'."$ccd".'_node'."$node".'_low_cnt_bkg';
+
 		if(${$plot_out_cnt} > 0){
 			open(OUT,">$out_file");
 			print OUT "# no. of file: ${$plot_out_cnt}\n";
@@ -608,9 +655,9 @@ for($ccd = 0; $ccd < 10; $ccd++){
 			}
 			close(OUT);
 #
-			$plot_out_dir = "$dir_name".'/CCD'."$ccd".'/node'."$node".'_low_bkg.gif';
-			$title = "Combined Data (# of file: ${$plot_out_cnt}): ". 'CCD'."$ccd".' Node'."$node";
-			$plot_fit_line  = 0;
+			$plot_out_dir  = "$dir_name".'/CCD'."$ccd".'/node'."$node".'_low_bkg.gif';
+			$title         = "Combined Data (# of file: ${$plot_out_cnt}): ". 'CCD'."$ccd".' Node'."$node";
+			$plot_fit_line = 0;
 			plot_fit();
 		}
 		
@@ -632,13 +679,15 @@ sub find_sim_position{
      #       HRC-S, you would expect the external calibration source.
      #       HRC-I, you would expect only background.  When the sim position is
 
-        $sum = 0;
-        $smin =  1000000;
-        $smax = -1000000;
+        $sum   = 0;
+        $smin  =  1000000;
+        $smax  = -1000000;
         $tcnt  = 0;
         $istep = 0;
+
         OUTER:
         foreach $stime (@sim_time){
+
                 if($stime > $tstart && $stime < $tstop){
                         $sum += $sim_pos[$istep];
                         if($sim_pos[$istep] < $smin){
@@ -649,6 +698,7 @@ sub find_sim_position{
                         }
                         $tcnt++;
                 }
+
                 if($stime > $tstop){
                         if($tcnt == 0){
                                 $sim_avg = 0.5 * ($sim_pos[$istep -1] 
@@ -668,6 +718,7 @@ sub find_sim_position{
                 }
                 $istep++;
         }
+
         if($tcnt >0){
                 $sim_avg = $sum / $tcnt;
         }
@@ -680,13 +731,13 @@ sub find_sim_position{
 
 sub find_peaks{
 
-        $max = -999;
-        $xmax = 0;
-        $cnt = 0;
+        $max       = -999;
+        $xmax      = 0;
+        $cnt       = 0;
         @peak_list = ();
-        @xdata = ();
-        @ydata = ();
-        $cnt = 0;
+        @xdata     = ();
+        @ydata     = ();
+
         OUTER:
         foreach $ent (@data){
                 if($cnt > 2500){
@@ -704,9 +755,9 @@ sub find_peaks{
 
 #        if($max > 10){
 
-                $a[0] = $xmax;
-                $a[1] = $max;
-                $a[2] = 10;
+                $a[0]  = $xmax;
+                $a[1]  = $max;
+                $a[2]  = 10;
                 $rmin  = int($xmax - 200);
                 $rmax  = int($xmax + 200);
 
@@ -728,9 +779,9 @@ sub find_peaks{
                         $cf1  = $chisq;
                 }
 
-                $a[0] = 0.25 * $xmax;
-                $a[1] = 0.50 * $max;
-                $a[2] = 10;
+                $a[0]  = 0.25 * $xmax;
+                $a[1]  = 0.50 * $max;
+                $a[2]  = 10;
                 $rmin  = int($a[0] - 50);
                 $rmax  = int($a[0] + 50);
 
@@ -751,9 +802,9 @@ sub find_peaks{
                         $cf2  = $chisq;
                 }
 
-                $a[0] = 0.765 * $xmax;
-                $a[1] = 0.50 * $max;
-                $a[2] = 10;
+                $a[0]  = 0.765 * $xmax;
+                $a[1]  = 0.50 * $max;
+                $a[2]  = 10;
                 $rmin  = int($a[0] - 100);
                 $rmax  = int($a[0] + 100);
 
@@ -785,17 +836,21 @@ sub find_peaks{
 ####################################################################
 
 sub chi_fit{
-        $sum = 0;
+        $sum  = 0;
         $base = $rmax - $rmin;
+
 	if($base == 0){
 		$base = 20;		# 20 is totally abitrally chosen
 	}
+
         for($i = $rmin; $i <= $rmax; $i++){
+
 		if($a[2] == 0){
 			$z = 0;
 		}else{
                 	$z = ($i - $a[0])/$a[2];
 		}
+
                 $y_est = $a[1]* exp(-1.0*($z*$z)/2.0);
 
                 $diff = ($ydata[$i] - $y_est)/$base;
@@ -1097,7 +1152,7 @@ sub plot_fit{
 #
 #--- change a ps file to a gif file
 #
-	system("echo ''|gs -sDEVICE=ppmraw  -r256x256 -q -NOPAUSE -sOutputFile=-  pgplot.ps| /data/mta4/MTA/bin/pnmflip -r270 | /data/mta4/MTA/bin/ppmtogif > $plot_out_dir");
+	system("echo ''|gs -sDEVICE=ppmraw  -r256x256 -q -NOPAUSE -sOutputFile=-  pgplot.ps| $bin_dir/pnmflip -r270 | $bin_dir/ppmtogif > $plot_out_dir");
 }
 
 ################################################################
@@ -1109,15 +1164,15 @@ sub fit_fnc {
 		$est2 = 0;
 		$est3 = 0;
 		if($wid1 > 0){
-                	$z1 = ($i - $pos1)/($wid1/2.354);
+                	$z1   = ($i - $pos1)/($wid1/2.354);
 			$est1 = $cnt1* exp(-1.0*($z1*$z1)/2.0);
 		}
 		if($wid2 > 0){
-                	$z2 = ($i - $pos2)/($wid2/2.354);
+                	$z2   = ($i - $pos2)/($wid2/2.354);
 			$est2 = $cnt2* exp(-1.0*($z2*$z2)/2.0);
 		}
 		if($wid3 > 0){
-                	$z3 = ($i - $pos3)/($wid3/2.354);
+                	$z3   = ($i - $pos3)/($wid3/2.354);
 			$est3 = $cnt3* exp(-1.0*($z3*$z3)/2.0);
 		}
                 $y_est =  $est1 + $est2 + $est3;

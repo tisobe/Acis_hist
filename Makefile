@@ -3,7 +3,7 @@
 ############################
 TASK = Acis_hist
 
-include /data/mta4/MTA/include/Makefile.MTA
+include /data/mta/MTA/include/Makefile.MTA
 
 BIN  = acis_hist_acc_bkg_plot_full.perl acis_hist_main.perl acis_hist_main_script acis_hist_plot_trend.perl acis_hist_print_html.perl acis_hist_wrap_script
 DOC  = README

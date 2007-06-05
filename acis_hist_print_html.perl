@@ -6,9 +6,20 @@
 #                                                                       #
 #       author: Isobe Takashi (tisobe@cfa.harvard.edu)                  #
 #                                                                       #
-#       03/08/05: last updated                                          #
+#       08/17/05: last updated                                          #
 #                                                                       #
 #########################################################################
+
+#############################################################################
+#
+#---- set directories
+
+$web_dir  = '/data/mta/www/mta_acis_hist/';
+$bin_dir  = '/data/mta/MTA/bin/';
+$data_dir = '/data/mta/MTA/data/';
+
+#############################################################################
+
 
 ##### find today's date and convert them appropriately
 
@@ -45,7 +56,7 @@ if($dmonth < 1){
 	$dyear = $uyear - 1;
 }
 
-open(FH, '/data/mta/www/mta_acis_hist/Data/warn_no_data_trend');
+open(FH, "$web_dir/Data/warn_no_data_trend");
 @no_trend_data = ();
 while(<FH>){
 	chomp $_;
@@ -54,7 +65,7 @@ while(<FH>){
 }
 close(FH);
 
-open(FH, '/data/mta/www/mta_acis_hist/Data/warn_no_data_trend_bkg');
+open(FH, "$web_dir/Data/warn_no_data_trend_bkg");
 @no_bkg_data = ();
 while(<FH>){
 	chomp $_;
@@ -63,7 +74,7 @@ while(<FH>){
 }
 close(FH);
 
-open(FH, '/data/mta/www/mta_acis_hist/Data/warn_no_data_total_bkg');
+open(FH, "$web_dir/Data/warn_no_data_total_bkg");
 @no_total_bkg_data = ();
 while(<FH>){
 	chomp $_;
@@ -81,7 +92,7 @@ print_main_html();
 
 sub print_main_html{
 
-	open(OUT, ">/data/mta/www/mta_acis_hist/acis_hist_main.html");
+	open(OUT, ">$web_dir/acis_hist_main.html");
 
 	print OUT '<HTML>';
 	print OUT "\n";

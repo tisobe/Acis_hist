@@ -7,11 +7,22 @@ use PGPLOT;
 #			 position, line width, and count rate				#
 #											#
 #	author: t. isobe (tisobe@cfa.harvard.edu)					#
-#	last update: 03/08/05    	 						#
+#	last update: 08/17/05    	 						#
 #		modified to fit a new directry system					#
 #		cvs compatible								#
 #											#
 #########################################################################################
+
+#############################################################################
+#
+#---- set directories
+
+$web_dir  = '/data/mta/www/mta_acis_hist/';
+$bin_dir  = '/data/mta/MTA/bin/';
+$data_dir = '/data/mta/MTA/data/';
+
+#############################################################################
+
 
 #
 #---- set a constant second per a histgram frame
@@ -31,12 +42,12 @@ system("mkdir ./param");
 #--- checking whether the data exist or not
 #
 
-open(WARN, '>/data/mta/www/mta_acis_hist/Data/warn_no_data_trend');
+open(WARN, ">$web_dir/Data/warn_no_data_trend");
 
 OUTER:
 for($ccd = 0; $ccd < 10; $ccd++){
 	$name = "ccd$ccd".'_line_fitting_data';
-	open(COUT,"> /data/mta/www/mta_acis_hist/Results/$name");
+	open(COUT,"> $web_dir/Results/$name");
 	OUTER1:
 	foreach $loc ('low', 'high'){
 
@@ -44,7 +55,7 @@ for($ccd = 0; $ccd < 10; $ccd++){
 
 		OUTER2:
 		for($node = 0; $node < 4; $node++){
-			$input_file  = '/data/mta/www/mta_acis_hist/Results/CCD'."$ccd".'/node'."$node".'_'."$loc";
+			$input_file  = "$web_dir".'/Results/CCD'."$ccd".'/node'."$node".'_'."$loc";
 
 			@{xtime.$node}    = ();
 			@{frame.$node}    = ();
@@ -166,7 +177,7 @@ for($ccd = 0; $ccd < 10; $ccd++){
 #---- plotting peaks
 #
 
-		$out_plot1 = '/data/mta/www/mta_acis_hist/Results/CCD'."$ccd".'/'."$loc".'_peak.gif';
+		$out_plot1 = "$web_dir".'/Results/CCD'."$ccd".'/'."$loc".'_peak.gif';
 		if($loc eq 'high'){
 			$line = '801 - 1001';
 		}
@@ -209,7 +220,6 @@ for($ccd = 0; $ccd < 10; $ccd++){
 #
 #---- linear fit
 #
-print "I am here: $ccd<-->$loc<--->$elm<--->$node\n";
 				least_fit();
 
 				if($loc eq 'high'){
@@ -238,7 +248,7 @@ print "I am here: $ccd<-->$loc<--->$elm<--->$node\n";
 #---- plotting widths 
 #
 
-		$out_plot2 = '/data/mta/www/mta_acis_hist/Results/CCD'."$ccd".'/'."$loc".'_width.gif';
+		$out_plot2 = "$web_dir".'/Results/CCD'."$ccd".'/'."$loc".'_width.gif';
 		if($loc eq 'high'){
 			$line = '801 - 1001';
 		}
@@ -281,7 +291,6 @@ print "I am here: $ccd<-->$loc<--->$elm<--->$node\n";
 #
 #--- linear fit
 #
-print "I am there: $ccd<-->$loc<--->$elm<--->$node\n";
 				least_fit();
 
 				if($loc eq 'high'){
@@ -314,7 +323,7 @@ print "I am there: $ccd<-->$loc<--->$elm<--->$node\n";
 #---- plotting count rates
 #
 
-		$out_plot3 = '/data/mta/www/mta_acis_hist/Results/CCD'."$ccd".'/'."$loc".'_count.gif';
+		$out_plot3 = "$web_dir".'/Results/CCD'."$ccd".'/'."$loc".'_count.gif';
 		if($loc eq 'high'){
 			$line = '801 - 1001';
 		}
@@ -383,9 +392,9 @@ print "I am there: $ccd<-->$loc<--->$elm<--->$node\n";
 #
 #--- change ps files to gif files
 #
-		system("echo ''|gs -sDEVICE=ppmraw  -r256x256 -q -NOPAUSE -sOutputFile=-  peak.ps| /data/mta4/MTA/bin/pnmflip -r270 |/data/mta4/MTA/bin/ppmtogif > $out_plot1");
-		system("echo ''|gs -sDEVICE=ppmraw  -r256x256 -q -NOPAUSE -sOutputFile=-  width.ps| /data/mta4/MTA/bin/pnmflip -r270 |/data/mta4/MTA/bin/ppmtogif > $out_plot2");
-		system("echo ''|gs -sDEVICE=ppmraw  -r256x256 -q -NOPAUSE -sOutputFile=-  pgplot.ps| /data/mta4/MTA/bin/pnmflip -r270 |/data/mta4/MTA/bin/ppmtogif > $out_plot3");
+		system("echo ''|gs -sDEVICE=ppmraw  -r256x256 -q -NOPAUSE -sOutputFile=-  peak.ps| $bin_dir/pnmflip -r270 |$bin_dir/ppmtogif > $out_plot1");
+		system("echo ''|gs -sDEVICE=ppmraw  -r256x256 -q -NOPAUSE -sOutputFile=-  width.ps| $bin_dir/pnmflip -r270 |$bin_dir/ppmtogif > $out_plot2");
+		system("echo ''|gs -sDEVICE=ppmraw  -r256x256 -q -NOPAUSE -sOutputFile=-  pgplot.ps| $bin_dir/pnmflip -r270 |$bin_dir/ppmtogif > $out_plot3");
 		system('rm *ps');
 
 	}
