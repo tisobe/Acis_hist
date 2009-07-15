@@ -7,7 +7,7 @@ use PGPLOT;
 #			 position, line width, and count rate				#
 #											#
 #	author: t. isobe (tisobe@cfa.harvard.edu)					#
-#	last update: 08/17/05    	 						#
+#	last update: 07/15/09    	 						#
 #		modified to fit a new directry system					#
 #		cvs compatible								#
 #											#
@@ -392,9 +392,9 @@ for($ccd = 0; $ccd < 10; $ccd++){
 #
 #--- change ps files to gif files
 #
-		system("echo ''|gs -sDEVICE=ppmraw  -r256x256 -q -NOPAUSE -sOutputFile=-  peak.ps| $bin_dir/pnmflip -r270 |$bin_dir/ppmtogif > $out_plot1");
-		system("echo ''|gs -sDEVICE=ppmraw  -r256x256 -q -NOPAUSE -sOutputFile=-  width.ps| $bin_dir/pnmflip -r270 |$bin_dir/ppmtogif > $out_plot2");
-		system("echo ''|gs -sDEVICE=ppmraw  -r256x256 -q -NOPAUSE -sOutputFile=-  pgplot.ps| $bin_dir/pnmflip -r270 |$bin_dir/ppmtogif > $out_plot3");
+		system("echo ''|/opt/local/bin/gs -sDEVICE=ppmraw  -r256x256 -q -NOPAUSE -sOutputFile=-  peak.ps| $bin_dir/pnmflip -r270 |$bin_dir/ppmtogif > $out_plot1");
+		system("echo ''|/opt/local/bin/gs -sDEVICE=ppmraw  -r256x256 -q -NOPAUSE -sOutputFile=-  width.ps| $bin_dir/pnmflip -r270 |$bin_dir/ppmtogif > $out_plot2");
+		system("echo ''|/opt/local/bin/gs -sDEVICE=ppmraw  -r256x256 -q -NOPAUSE -sOutputFile=-  pgplot.ps| $bin_dir/pnmflip -r270 |$bin_dir/ppmtogif > $out_plot3");
 		system('rm *ps');
 
 	}

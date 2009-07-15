@@ -7,7 +7,7 @@ use PGPLOT;
 #												#
 #	author: t. isobe (tisobe@cfa.harvard.edu)						#
 #												#
-#	last update: Jun 05, 2007								#
+#	last update: Jul 15, 2009								#
 #												#
 #################################################################################################
 
@@ -1152,7 +1152,7 @@ sub plot_fit{
 #
 #--- change a ps file to a gif file
 #
-	system("echo ''|gs -sDEVICE=ppmraw  -r256x256 -q -NOPAUSE -sOutputFile=-  pgplot.ps| $bin_dir/pnmflip -r270 | $bin_dir/ppmtogif > $plot_out_dir");
+	system("echo ''|/opt/local/bin/gs -sDEVICE=ppmraw  -r256x256 -q -NOPAUSE -sOutputFile=-  pgplot.ps| $bin_dir/pnmflip -r270 | $bin_dir/ppmtogif > $plot_out_dir");
 }
 
 ################################################################

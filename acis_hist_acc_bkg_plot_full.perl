@@ -7,7 +7,7 @@ use PGPLOT;
 #			   size to 40, and plot it.						#
 #												#
 #	author: t. isobe (tisobe@cfa.harvard.edu)						#
-#	last update: May 24, 2004								#
+#	last update: Jul 15, 2009								#
 #################################################################################################
 
 #
@@ -208,7 +208,7 @@ for($ccd = 0; $ccd < 10; $ccd++){
 #
 #---- changing a ps file to a gif file
 #
-	system("echo ''|gs -sDEVICE=ppmraw  -r256x256 -q -NOPAUSE -sOutputFile=-  pgplot.ps| /data/mta4/MTA/bin/pnmflip -r270 | /data/mta4/MTA/bin/ppmtogif >$plot_file");
+	system("echo ''|/opt/local/bin/gs -sDEVICE=ppmraw  -r256x256 -q -NOPAUSE -sOutputFile=-  pgplot.ps| /data/mta4/MTA/bin/pnmflip -r270 | /data/mta4/MTA/bin/ppmtogif >$plot_file");
 	system('rm pgplot.ps');
 }	
 
