@@ -7,7 +7,7 @@ use PGPLOT;
 #			 position, line width, and count rate				#
 #											#
 #	author: t. isobe (tisobe@cfa.harvard.edu)					#
-#	last update: 07/15/09    	 						#
+#	last update:  Sep 21, 2010	 						#
 #		modified to fit a new directry system					#
 #		cvs compatible								#
 #											#
@@ -236,8 +236,8 @@ for($ccd = 0; $ccd < 10; $ccd++){
 				}
 			}
 			$mid = $asum/4.0;
-			$ymin = $mid - 50;
-			$ymax = $mid + 50;
+			$ymin = $mid - 60;
+			$ymax = $mid + 70;
 			plot_three_panels();
 		}
 
@@ -307,11 +307,11 @@ for($ccd = 0; $ccd < 10; $ccd++){
 				}
 			}
 			$mid = $asum/4.0;
-			$ymin = $mid - 40;
-			$ymax = $mid + 40;
+			$ymin = $mid - 50;
+			$ymax = $mid + 50;
 			if($ymin < 0){
 				$ymin = 0;
-				$ymax = 80;
+				$ymax = 120;
 			}
 			plot_three_panels();
 		}
@@ -385,6 +385,7 @@ for($ccd = 0; $ccd < 10; $ccd++){
 			$mid = $asum/4.0;
 			$ymin = 0;
 			$ymax = $mid + 0.03;
+			$ymax = 0.05;
 			plot_three_panels();
 		}
 
@@ -413,7 +414,16 @@ sub plot_three_panels{
 #	pgsch(1);
 #	pgslw(2);
 
+	if($xmin < 0){
+		$xmin = 0;
+	}
 	$xdiff  = $xmax - $xmin;
+	$ydiff  = $ymax - $ymin;
+	$ymin  -= 0.1 * $ydiff;
+	if($ymin < 0){
+		$ymin = 0;
+	}
+	$ymax  += 0.1 * $ydiff;
 	$ydiff  = $ymax - $ymin;
 	$xpos   = $xmin + 0.10 * $xdiff;
 	$ypos   = $ymax - 0.10 * $ydiff;

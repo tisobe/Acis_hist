@@ -6,7 +6,7 @@
 #                                                                       #
 #       author: Isobe Takashi (tisobe@cfa.harvard.edu)                  #
 #                                                                       #
-#       08/17/05: last updated                                          #
+#       09/21/2010: last updated                                        #
 #                                                                       #
 #########################################################################
 
@@ -203,7 +203,8 @@ sub print_main_html{
 	print OUT '6. Composite Background Plots. A bin size is 40 ADU and there are 100 bins in the plots.',"\n";
 	print OUT '<br>',"\n";
 	print OUT '<br>',"\n";
-	print OUT 'Note: For the background, we used the entire range, instead of 201-401 or 801-1001.',"\n";
+#	print OUT 'Note: For the background, we used the entire range, instead of 201-401 or 801-1001.',"\n";
+	print OUT 'Note: Background Counts/Plots data collection was terminated at the end of Year 2004.',"\n";
 	print OUT '</p><p>',"\n";
 	print OUT '<br>Reference:<br>',"\n";
 	print OUT "<a href='http://asc.harvard.edu/cal/Acis/Cal_prods/bkgrnd/current/background.html'>\n";
