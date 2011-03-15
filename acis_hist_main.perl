@@ -7,7 +7,7 @@ use PGPLOT;
 #												#
 #	author: t. isobe (tisobe@cfa.harvard.edu)						#
 #												#
-#	last update: Jul 15, 2009								#
+#	last update: Mar 15, 2011								#
 #												#
 #################################################################################################
 
@@ -15,19 +15,25 @@ use PGPLOT;
 #
 #---- set directories
 
-$web_dir  = '/data/mta/www/mta_acis_hist/';
-$bin_dir  = '/data/mta/MTA/bin/';
-$data_dir = '/data/mta/MTA/data/';
+open(FH, "/data/mta/Script/ACIS/ACIS_hist/house_keeping/dir_list");
+@atemp = ();
+while(<FH>){
+        chomp $_;
+        push(@atemp, $_);
+}
+close(FH);
+
+$bin_dir       = $atemp[0];
+$bdata_dir     = $atemp[1];
+$web_dir       = $atemp[2];
+$data_dir      = $atemp[3];
+$house_keeping = $atemp[4];
+$mj_dir        = $atemp[5];
+
 
 #############################################################################
-#
-#--- extra directories
 
-$mj_dir   = '/data/mta_www/mta_temp/mta_states/MJ/';
-
-#############################################################################
-
-open(FH, "$data_dir/.hakama");
+open(FH, "$bdata_dir/.hakama");
 while(<FH>){
 	chomp $_;
 	$pass = $_;
@@ -35,7 +41,7 @@ while(<FH>){
 }
 close(FH);
 
-open(FH, "$data_dir/.dare");
+open(FH, "$bdata_dir/.dare");
 while(<FH>){
 	chomp $_;
 	$dare = $_;
@@ -51,7 +57,7 @@ if($chk =~ /param/){
 }
 system("mkdir ./param");
 
-system("cp -r $web_dir/Results $web_dir/Results~");
+system("cp -r $web_dir/Results $data_dir/Results~");
 
 #
 #--- find out which month of data we want to work with
@@ -148,9 +154,9 @@ if($next_mon == 13) {
 #--- create output directory
 #
 
-$dir_name = "$web_dir".'/Data/Data'."_$year"."_$month";
+$dir_name = "$data_dir".'/Data/Data'."_$year"."_$month";
 
-$chk = `ls -d $web_dir/Data/*`;
+$chk = `ls -d $data_dir/Data/*`;
 if($chk !~ /$dir_name/){
 	system("mkdir $dir_name");
 	system("mkdir $dir_name/CCD0 $dir_name/CCD1 $dir_name/CCD2 $dir_name/CCD3");

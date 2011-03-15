@@ -6,7 +6,7 @@
 #                                                                       #
 #       author: Isobe Takashi (tisobe@cfa.harvard.edu)                  #
 #                                                                       #
-#       09/21/2010: last updated                                        #
+#       03/15/2011: last updated                                        #
 #                                                                       #
 #########################################################################
 
@@ -14,9 +14,20 @@
 #
 #---- set directories
 
-$web_dir  = '/data/mta/www/mta_acis_hist/';
-$bin_dir  = '/data/mta/MTA/bin/';
-$data_dir = '/data/mta/MTA/data/';
+open(FH, "/data/mta/Script/ACIS/ACIS_hist/house_keeping/dir_list");
+@atemp = ();
+while(<FH>){
+        chomp $_;
+        push(@atemp, $_);
+}
+close(FH);
+
+$bin_dir       = $atemp[0];
+$bdata_dir     = $atemp[1];
+$web_dir       = $atemp[2];
+$data_dir      = $atemp[3];
+$house_keeping = $atemp[4];
+$mj_dir        = $atemp[5];
 
 #############################################################################
 
@@ -56,7 +67,7 @@ if($dmonth < 1){
 	$dyear = $uyear - 1;
 }
 
-open(FH, "$web_dir/Data/warn_no_data_trend");
+open(FH, "$data_dir/Data/warn_no_data_trend");
 @no_trend_data = ();
 while(<FH>){
 	chomp $_;
@@ -65,7 +76,7 @@ while(<FH>){
 }
 close(FH);
 
-open(FH, "$web_dir/Data/warn_no_data_trend_bkg");
+open(FH, "$data_dir/Data/warn_no_data_trend_bkg");
 @no_bkg_data = ();
 while(<FH>){
 	chomp $_;
@@ -74,7 +85,7 @@ while(<FH>){
 }
 close(FH);
 
-open(FH, "$web_dir/Data/warn_no_data_total_bkg");
+open(FH, "$data_dir/Data/warn_no_data_total_bkg");
 @no_total_bkg_data = ();
 while(<FH>){
 	chomp $_;

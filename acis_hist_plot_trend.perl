@@ -7,7 +7,7 @@ use PGPLOT;
 #			 position, line width, and count rate				#
 #											#
 #	author: t. isobe (tisobe@cfa.harvard.edu)					#
-#	last update:  Sep 21, 2010	 						#
+#	last update:  Mar 15, 2011	 						#
 #		modified to fit a new directry system					#
 #		cvs compatible								#
 #											#
@@ -17,9 +17,20 @@ use PGPLOT;
 #
 #---- set directories
 
-$web_dir  = '/data/mta/www/mta_acis_hist/';
-$bin_dir  = '/data/mta/MTA/bin/';
-$data_dir = '/data/mta/MTA/data/';
+open(FH, "/data/mta/Script/ACIS/ACIS_hist/house_keeping/dir_list");
+@atemp = ();
+while(<FH>){
+        chomp $_;
+        push(@atemp, $_);
+}
+close(FH);
+
+$bin_dir       = $atemp[0];
+$bdata_dir     = $atemp[1];
+$web_dir       = $atemp[2];
+$data_dir      = $atemp[3];
+$house_keeping = $atemp[4];
+$mj_dir        = $atemp[5];
 
 #############################################################################
 
@@ -42,7 +53,7 @@ system("mkdir ./param");
 #--- checking whether the data exist or not
 #
 
-open(WARN, ">$web_dir/Data/warn_no_data_trend");
+open(WARN, ">$data_dir/Data/warn_no_data_trend");
 
 OUTER:
 for($ccd = 0; $ccd < 10; $ccd++){
