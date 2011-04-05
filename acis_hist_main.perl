@@ -154,7 +154,7 @@ if($next_mon == 13) {
 #--- create output directory
 #
 
-$dir_name = "$data_dir".'/Data/Data'."_$year"."_$month";
+$dir_name = "$data_dir".'/Data'."_$year"."_$month";
 
 $chk = `ls -d $data_dir/Data/*`;
 if($chk !~ /$dir_name/){
