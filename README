@@ -17,6 +17,19 @@ Location: /data/mta/Scriot/Acis_hist/New_acis_hist
 Web site: http://asc.harvard.edu/mta_days/mta_acis_hist/New/acis_hist_main.html
 	  /data/mta/www/mta_acis_hist/New
 
+----------
+directory
+----------
+
+/data/mta/Script/ACIS/Acis_hist/house_keeping/dir_list
+
+$bin_dir	/data/mta/MTA/bin/					#--- executable is kept
+$bdata_dir	/data/mta/MTA/data/					#--- bin data directory
+$web_dir	/data/mta/www/mta_acis_hist/				#--- web site directory
+$data_dir	/data/mta/Script/ACIS/ACIS_hist/Data/			#--- directory holds data
+$house_keeping	/data/mta/Script/ACIS/ACIS_hist/house_keeping/		#--- house keeping
+$mj_dir		/data/mta_www/mta_temp/mta_states/MJ/			#--- state data are obtained from here
+
 
 --------------------
 acis_hist_main.perl
@@ -80,9 +93,9 @@ Input:
 	/data/mta/www/mta_acis_hist/Data/Results/CCD<ccd#>/node<node#>_<loc>: data file from acis_hist.perl. loc is high or low
 
 Output:
-	/data/mta/www/mta_acis_hist/Data/Results/CCD<ccd#>/<loc>_peak.gif
-	/data/mta/www/mta_acis_hist/Data/Results/CCD<ccd#>/<loc>_width.gif
-	/data/mta/www/mta_acis_hist/Data/Results/CCD<ccd#>/<loc>_count.gif
+	/data/mta/www/mta_acis_hist/Results/CCD<ccd#>/<loc>_peak.gif
+	/data/mta/www/mta_acis_hist/Results/CCD<ccd#>/<loc>_width.gif
+	/data/mta/www/mta_acis_hist/Results/CCD<ccd#>/<loc>_count.gif
 
 ---------------------------------
 acis_hist_acc_bkg_plot_full.perl

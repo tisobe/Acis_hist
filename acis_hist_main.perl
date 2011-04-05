@@ -7,7 +7,7 @@ use PGPLOT;
 #												#
 #	author: t. isobe (tisobe@cfa.harvard.edu)						#
 #												#
-#	last update: Mar 15, 2011								#
+#	last update: Apr 05, 2011								#
 #												#
 #################################################################################################
 
@@ -15,7 +15,7 @@ use PGPLOT;
 #
 #---- set directories
 
-open(FH, "/data/mta/Script/ACIS/ACIS_hist/house_keeping/dir_list");
+open(FH, "/data/mta/Script/ACIS/Acis_hist/house_keeping/dir_list");
 @atemp = ();
 while(<FH>){
         chomp $_;

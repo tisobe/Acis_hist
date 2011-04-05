@@ -6,7 +6,7 @@
 #                                                                       #
 #       author: Isobe Takashi (tisobe@cfa.harvard.edu)                  #
 #                                                                       #
-#       03/15/2011: last updated                                        #
+#       04/05/2011: last updated                                        #
 #                                                                       #
 #########################################################################
 
@@ -14,7 +14,7 @@
 #
 #---- set directories
 
-open(FH, "/data/mta/Script/ACIS/ACIS_hist/house_keeping/dir_list");
+open(FH, "/data/mta/Script/ACIS/Acis_hist/house_keeping/dir_list");
 @atemp = ();
 while(<FH>){
         chomp $_;
